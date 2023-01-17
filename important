@@ -169,7 +169,7 @@ db::update("exec procedimiento @param1 = $p1, @param2 = $p2, @param3 = $p3");
 ------------------------------------------------------------------------------------------------------------------------
 
 
-
+npx create-react-app proyecto-name
 
 -- bootstrap
 
