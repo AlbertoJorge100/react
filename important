@@ -1,0 +1,200 @@
+
+
+CREATE DATABASE _COMPRA_VENTA
+GO
+USE _COMPRA_VENTA
+GO
+
+CREATE TABLE CLIENTE 
+( ID BIGINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+NOMBRE VARCHAR (50) NOT NULL ,
+DIRECCION VARCHAR (50) NOT NULL, 
+TELEFONO VARCHAR (50) NOT NULL, 
+ARTICULO VARCHAR (50) NOT NULL, 
+CANTIDAD VARCHAR (50) NOT NULL, 
+PRECIOUNITARIO INT NOT NULL
+
+)
+GO
+CREATE TABLE VENTA
+( 
+	ID BIGINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+	DESCUENTO VARCHAR (50) NOT NULL,
+	VENTATOTAL VARCHAR (50) NOT NULL,
+	ID_CLIENTE BIGINT NOT NULL,
+	FOREIGN KEY (ID_CLIENTE) REFERENCES CLIENTE (Id)
+)
+
+create table vendedor ( 
+ID BIGINT NOT NULL PRIMARY KEY IDENTITY (1,1),
+ID_VENTA BIGINT NOT NULL ,
+NOMBRE VARCHAR (50) NOT NULL,
+ FOREIGN KEY (ID_VENTA) REFERENCES VENTA (ID)
+)
+
+USE _COMPRA_VENTA
+GO 
+
+--insertar cliente 
+drop procedure if exists sp_cliente;
+create procedure SP_CLIENTE
+--PARametro @
+@NOMBREE__  VARCHAR (50),@DIRECCION_ VARCHAR (50) , @TELEFONO_  VARCHAR (50) ,
+@ARTICULO_ VARCHAR (50) , @CANTIDAD_  VARCHAR (50) , @PRECIOUNITARIO INT 
+as
+BEGIN 
+       insert into CLIENTE 
+      values (@NOMBREE__,@DIRECCION_,@TELEFONO_,@ARTICULO_,@CANTIDAD_,@PRECIOUNITARIO);
+end 
+
+exec sp_cliente 'toño', 'izalco', '43434343','lo que sea',10, 2.4;
+select* from cliente;
+
+
+-- Modificar cliente
+drop procedure if exists sp_cliente_actualizar;
+create procedure SP_CLIENTE_ACTUALIZAR
+@NOMBREE__  VARCHAR (50),@DIRECCION_ VARCHAR (50), @IDCLIENTE int 
+as
+BEGIN 
+	update cliente set nombre=@nombree__, direccion=@direccion_
+	where ID=@IDCLIENTE;       
+end 
+exec sp_cliente_actualizar 'mario','sonsonate izalco',3;
+
+-- Eliminar cliente
+drop procedure if exists sp_cliente_eliminar;
+create procedure SP_CLIENTE_ELIMINAR
+--PARametro @
+@IDCLIENTE int 
+as
+BEGIN 
+	delete from cliente 
+	where ID=@IDCLIENTE;       
+end 
+exec sp_cliente_eliminar 2;
+
+
+-- Buscar cliente
+drop procedure if exists sp_cliente_buscar;
+create procedure SP_CLIENTE_BUSCAR
+--PARametro @
+@NOMBREE__  VARCHAR (50)
+as
+BEGIN 	
+	select* from cliente 
+	where nombre=@nombree__
+	and cantidad >10;
+end 
+exec sp_cliente_buscar 'toño';
+
+
+-- Listar clientes con like...
+drop procedure if exists sp_cliente_listar;
+create procedure SP_CLIENTE_LISTAR 
+@nombre varchar(30), @telefono varchar(9)
+as
+BEGIN 
+SELECT*FROM CLIENTE where nombre like(concat('%',@nombre,'%'))
+and telefono=@telefono;	
+end								
+
+exec sp_cliente_listar 'a','43434343';
+
+
+SELECT*FROM CLIENTE;
+-- Listando 2 tablas 
+select* from venta;
+-- insertando en la tabla venta
+insert into venta(descuento, ventatotal, ID_CLIENTE)
+values(0.1, 2, 3);
+
+
+
+drop procedure if exists sp_cliente_multitabla;
+create procedure SP_CLIENTE_MULTITABLA
+--PARametro @
+as
+BEGIN 
+	select*
+	from venta as v 
+	inner join cliente as c 
+	on v.id_cliente=c.id;
+end 
+
+exec sp_cliente_multitabla;
+select* from cliente
+
+
+
+-- Vendedor multitabla de 3 
+insert into vendedor (id_venta, nombre) values (1, 'toño');
+select* from vendedor;
+drop procedure if exists sp_cliente_multitabla_3;
+create procedure SP_CLIENTE_MULTITABLA_3
+--PARametro @
+as
+BEGIN 
+	select*
+	from venta as v 
+	inner join cliente as c 
+	on v.id_cliente=c.id
+	inner join vendedor as ve
+	on v.ID=ve.ID_VENTA;
+end 
+
+exec sp_cliente_multitabla;
+
+drop procedure if exists sp_listar;
+create procedure sp_listar @id int, @name varchar(100), @price decimal(5,2)
+as
+BEGIN 
+	SELECT*FROM products where id > @id and name like(concat('%',@name,'%')) and price > @price;	
+end		
+
+exec sp_listar 1, 'a', 260;
+
+laravel 
+$p1 = "dato1";
+$p2 = "dato2";
+$p3 = "dato3";
+
+
+-- insert, update, delete (update) ... select (select)
+
+db::update("exec procedimiento @param1 = $p1, @param2 = $p2, @param3 = $p3");
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+-- bootstrap
+
+	npm install bootstrap
+
+
+-- axios
+	
+	npm install axios react-bootstrap bootstrap 
+
+-- sweet alert
+
+	npm install react-router-dom sweetalert2 --save
+
+
+-- datatables bootstrap
+	
+	npm install react-data-table-component style-components
+
+
+-- modales 
+	
+	npm install --save react-modal
+
+
+
+
+
